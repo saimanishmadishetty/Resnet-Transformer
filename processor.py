@@ -1008,9 +1008,13 @@ class_labels = {0: 'tench, Tinca tinca',
 def pre_process(input):
     img_height = 224
     img_width = 224
-    img_array = np.array(Image.open(BytesIO(base64.b64decode(input))).resize((img_height, img_width)))
+    image_data = base64.b64decode(input)
+    image = Image.open(BytesIO(image_data)).convert('RGB')
+    image = image.resize((img_height, img_width))
+    img_array = np.array(image)
     transformed_input = img_array.tolist()
     return transformed_input
+
 
 def post_process(input):
     scores = tf.nn.softmax(input)
